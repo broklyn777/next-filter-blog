@@ -13,6 +13,9 @@ alt
 image
 url**
 
+
+now secret add api-url https://thawing-savannah-80921.herokuapp.com
+
 Next, using the Content tab, click the Add Post button to create a post, providing the relevant details (e.g. Vercel blog URL, an image href atribute, etc.).
 
 That's it for setting up you content structure! You can edit both the Content and Content Model at any time, giving you complete flexibility over your content.
