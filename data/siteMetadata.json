@@ -1,8 +1,8 @@
 {
-  "title": "Next.js Starter Blog",
+  "title": "Film/Developer Blog",
   "author": "Einar Löf",
-  "headerTitle": "TailwindBlog",
-  "description": "A blog created with Next.js and Tailwind.css",
+  "headerTitle": "Film & Dev Blog",
+  "description": "En blog om Filmer och Web Development",
   "language": "sv-us",
   "siteUrl": "https://tailwind-nextjs-starter-blog.vercel.app",
   "siteRepo": "https://github.com/timlrx/tailwind-nextjs-starter-blog",
@@ -14,5 +14,5 @@
   "facebook": "https://facebook.com",
   "youtube": "https://youtube.com",
   "linkedin": "https://www.linkedin.com",
-  "locale": "en-US"
+  "locale": "sv"
 }

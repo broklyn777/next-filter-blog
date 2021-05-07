@@ -2,10 +2,6 @@
 import Select from 'react-select'
 import {useQuery, useQueryClient} from 'react-query'
 import {useState} from 'react'
-import { PageSeo } from '@/components/SEO'
-import siteMetadata from '@/data/siteMetadata'
-
-
 
 const { NEXT_PUBLIC_API_URL } = process.env
 
@@ -44,11 +40,6 @@ const FilterMovies = ({ movies, actors, genres }) => {
     const {data, status} = useQuery(['movies', {genre: genreId}, {actors: actorsIds}], getMovies, {initialData: movies})
 return (
         <>
-          <PageSeo
-        title={siteMetadata.title}
-        description={siteMetadata.description}
-        url={siteMetadata.siteUrl}
-      />
             <div variant="container">
                 <div as="h2" my={40}>Filter movies</div>
     
