@@ -8,6 +8,9 @@ module.exports = withBundleAnalyzer({
   future: {
     webpack5: true,
   },
+   images: {
+    domains: ['images.ctfassets.net'],
+  },
     //   env: {
     //     API_URL: process.env.API_URL,
     //     IMAGES_DOMAIN: process.env.IMAGES_DOMAIN
