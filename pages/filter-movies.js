@@ -102,20 +102,21 @@ export async function getServerSideProps() {
     const resGenres = await fetch(`${NEXT_PUBLIC_API_URL}/genres`)
     const genresData = await resGenres.json()
 
-    const resBolags = await fetch(`${NEXT_PUBLIC_API_URL}/bolags`)
-    const bolagsData = await resBolags.json()
+    // const resBolags = await fetch(`${NEXT_PUBLIC_API_URL}/bolags`)
+    // const bolagsData = await resBolags.json()
 
     return {
         props: {
             movies: moviesData,
             actors: actorsData,
             genres: genresData,
-            bolags: bolagsData
+            // bolags: bolagsData
         },
     }
 }
 
 export default FilterMovies
+
 
 
 
