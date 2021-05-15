@@ -1,6 +1,6 @@
 import { createClient } from 'contentful'
 import RecipeCard from '../components/RecipeCard'
-import Filter from '../components/Filter'
+
 
 
 
@@ -10,6 +10,7 @@ export async function getStaticProps() {
     space: process.env.CONTENTFUL_SPACE_ID,
     accessToken: process.env.CONTENTFUL_ACCESS_KEY,
   })
+
   const res = await client.getEntries({ content_type: "recipe" })
 
   return {
@@ -24,10 +25,7 @@ export default function Recipes({ recipes }) {
  
 
   return (
-
     <div className="recipe-list">
-      <Filter 
-      />
       {recipes.map(recipe => (
         <RecipeCard key={recipe.sys.id} recipe={recipe} />
     

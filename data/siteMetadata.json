@@ -1,7 +1,7 @@
 {
   "title": "Film/Developer Blog",
   "author": "Einar Löf",
-  "headerTitle": "Film & Dev Blog",
+  "headerTitle": "Film/Dev Blog",
   "description": "En blog om Filmer och Web Development",
   "language": "sv-us",
   "siteUrl": "https://tailwind-nextjs-starter-blog.vercel.app",

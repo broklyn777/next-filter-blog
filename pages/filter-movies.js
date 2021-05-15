@@ -33,6 +33,7 @@ const getMovies = async(key) => {
 }
 
 const FilterMovies = ({ movies, actors, genres }) => {
+
     const queryClient = useQueryClient()
     const [genreId, setGenreId] = useState(null)
     const [actorsIds, setActors] = useState([])

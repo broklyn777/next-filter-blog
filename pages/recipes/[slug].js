@@ -61,10 +61,10 @@ export default function RecipeDetails({ recipe }) {
         />
         <h2>{ title }</h2>
       </div>
-
+    <h3 className="font-bold">Tid:</h3>
       <div className="info">
-        <p>Takes about { cookingTime } mins to cook.</p>
-        <h3>Ingredients:</h3>
+        <p>Tar ca { cookingTime } minuter att laga.</p>
+        <h3 className="font-bold">Ingredienser:</h3>
 
         {ingredients.map(ing => (
           <span key={ing}>{ ing }</span>
@@ -72,23 +72,26 @@ export default function RecipeDetails({ recipe }) {
       </div>
         
       <div className="method">
-        <h3>Method:</h3>
+        <h3 className="font-bold">Metod:</h3>
         <div>{documentToReactComponents(method)}</div>
       </div>
 
       <style jsx>{`
         h2,h3 {
           text-transform: uppercase;
+       
+         
         }
         .banner h2 {
+   color: #fff;
           margin: 0;
-          background: #fff;
+          background: #0ea5e9;
           display: inline-block;
           padding: 20px;
           position: relative;
-          top: -60px;
-          left: -10px;
-          transform: rotateZ(-1deg);
+          top: -70px;
+          // left: -10px;
+          // transform: rotateZ(-1deg);
           box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
         }
         .info p {

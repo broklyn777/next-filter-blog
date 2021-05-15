@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 export default function Layout({ children }) {
   return (
+   
     <div className="layout">
       <header>
         <Link href="/">

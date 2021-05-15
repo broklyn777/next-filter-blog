@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function RecipeCard({ recipe }) {
   const { title, slug, cookingTime, thumbnail } = recipe.fields
-
+console.log(recipe );
   return (
     <div className="card">
       <div className="featured">
@@ -16,7 +16,7 @@ export default function RecipeCard({ recipe }) {
       <div className="content">
         <div className="info">
           <h4>{ title }</h4>
-          <p>Detta tar ca { cookingTime } min att laga</p>
+          <p>Detta tar ca {cookingTime } min att laga</p>
         </div>
         <div className="actions">
           <Link href={'/recipes/' + slug}><a>Visa recept</a></Link>
@@ -25,7 +25,7 @@ export default function RecipeCard({ recipe }) {
 
       <style jsx>{`
         .card {
-          transform: rotateZ(-1deg);
+          // transform: rotateZ(-1deg);
         }
         .content {
           background: #fff;
@@ -33,10 +33,10 @@ export default function RecipeCard({ recipe }) {
           margin: 0;
           position: relative;
           top: -40px;
-          left: -10px;
+          // left: -10px;
         }
         .info {
-          padding: 16px;
+          padding: 1px;
         }
         .info h4 {
           margin: 4px 0;
@@ -47,14 +47,14 @@ export default function RecipeCard({ recipe }) {
           color: #777;
         }
         .actions {
-          margin-top: 20px;
+          margin-top: -20px;
           display: flex;
           justify-content: flex-end;
         }
         .actions a {
           color: #fff;
-          background: #f01b29;
-          padding: 16px 24px;
+          background: #0ea5e9;
+          padding: 8px 12px;
           text-decoration: none;
         }
       `}</style>
