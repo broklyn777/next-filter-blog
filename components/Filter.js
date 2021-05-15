@@ -1,8 +1,24 @@
+
 import Select from 'react-select'
 import {useQuery, useQueryClient} from 'react-query'
 import {useState} from 'react'
 
 const { NEXT_PUBLIC_API_URL } = process.env
+export async function getStaticProps() {
+
+  const client = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID,
+    accessToken: process.env.CONTENTFUL_ACCESS_KEY,
+  })
+
+ç
+  return {
+    props: {
+      recipes: res.items,
+    },
+    revalidate: 1
+  }
+}
 
 const getMovies = async(key) => {
     console.log(key)
@@ -33,7 +49,6 @@ const getMovies = async(key) => {
 }
 
 const FilterMovies = ({ movies, actors, genres }) => {
-
     const queryClient = useQueryClient()
     const [genreId, setGenreId] = useState(null)
     const [actorsIds, setActors] = useState([])
@@ -41,7 +56,7 @@ const FilterMovies = ({ movies, actors, genres }) => {
 return (
         <>
             <div variant="container">
-                <div as="h2" my={40}>Filter movies</div>
+                <div as="h2" my={40}>Filter Recept</div>
     
                 <div mb={100}>
                     <div width={200} mr={20}>
@@ -51,7 +66,7 @@ return (
                             options={actors}
                             instanceId="actors"
                             isMulti
-                            placeholder="Filter by Actors"
+                            placeholder="Filter by Måltid"
                             onChange={values => setActors(values.map(actor => actor.id))}
                         />
                         <br />
@@ -60,14 +75,14 @@ return (
                             getOptionValue={option => option.id} 
                             options={genres} 
                             instanceId="genres" 
-                            placeholder="Filter by Genres"
+                            placeholder="Filter by Ingredienser"
                             isClearable
                             onChange={value => setGenreId(value ? value.id : null)}
                         />
                     </div>
                     <div>
-                        {status === 'loading' && <div>I'm loading your movies</div>}
-                        {status === 'error' && <div>Something went wrong</div>}
+                        {status === 'loading' && <div>Laddar Recept...</div>}
+                        {status === 'error' && <div>Något gick fel</div>}
 
                         {status === 'success' && data.map(movie => (
                             <div key={movie.id} p={10}>
@@ -102,8 +117,8 @@ export async function getServerSideProps() {
     const resGenres = await fetch(`${NEXT_PUBLIC_API_URL}/genres`)
     const genresData = await resGenres.json()
 
-    // const resBolags = await fetch(`${NEXT_PUBLIC_API_URL}/bolags`)
-    // const bolagsData = await resBolags.json()
+    const resBolags = await fetch(`${NEXT_PUBLIC_API_URL}/bolags`)
+    const bolagsData = await resBolags.json()
 
     return {
         props: {

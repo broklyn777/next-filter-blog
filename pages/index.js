@@ -1,100 +1,131 @@
-import Link from '@/components/Link'
+
+import Select from 'react-select'
+import {useQuery, useQueryClient} from 'react-query'
+import {useState} from 'react'
 import { PageSeo } from '@/components/SEO'
-import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import { getAllFilesFrontMatter } from '@/lib/mdx'
 
-const MAX_DISPLAY = 5
-const postDateTemplate = { year: 'numeric', month: 'long', day: 'numeric' }
 
-export async function getStaticProps() {
-  const posts = await getAllFilesFrontMatter('blog')
 
-  return { props: { posts } }
+const { NEXT_PUBLIC_API_URL } = process.env
+
+const getMovies = async(key) => {
+    console.log(key)
+    const genreId = key.queryKey[1].genre
+    const actorsIds = key.queryKey[2].actors.map(id => `actors.id=${id}`)
+    console.log(actorsIds)
+
+    const actorsQueryString = actorsIds.join('&')
+    console.log(actorsQueryString)
+
+    if(genreId && actorsQueryString) {
+        const res = await fetch(`${NEXT_PUBLIC_API_URL}/movies?genre.id=${genreId}&${actorsQueryString}`)
+        return res.json()
+    }
+
+    if(genreId) {
+        const res = await fetch(`${NEXT_PUBLIC_API_URL}/movies?genre.id=${genreId}`)
+        return res.json()
+    }
+
+    if(actorsQueryString) {
+        const res = await fetch(`${NEXT_PUBLIC_API_URL}/movies?${actorsQueryString}`)
+        return res.json()
+    }
+
+    const res = await fetch(`${NEXT_PUBLIC_API_URL}/movies`)
+    return res.json()
 }
 
-export default function Home({ posts }) {
-  return (
-    <>
-      <PageSeo
+const FilterMovies = ({ movies, actors, genres }) => {
+    const queryClient = useQueryClient()
+    const [genreId, setGenreId] = useState(null)
+    const [actorsIds, setActors] = useState([])
+    const {data, status} = useQuery(['movies', {genre: genreId}, {actors: actorsIds}], getMovies, {initialData: movies})
+return (
+        <>
+          <PageSeo
         title={siteMetadata.title}
         description={siteMetadata.description}
         url={siteMetadata.siteUrl}
       />
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="pt-6 pb-8 space-y-2 md:space-y-5">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            Latest
-          </h1>
-          <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            {siteMetadata.description}
-          </p>
-        </div>
-        <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-          {!posts.length && 'No posts found.'}
-          {posts.slice(0, MAX_DISPLAY).map((frontMatter) => {
-            const { slug, date, title, summary, tags } = frontMatter
-            return (
-              <li key={slug} className="py-12">
-                <article>
-                  <div className="space-y-2 xl:grid xl:grid-cols-4 xl:space-y-0 xl:items-baseline">
-                    <dl>
-                      <dt className="sr-only">Published on</dt>
-                      <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                        <time dateTime={date}>
-                          {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                        </time>
-                      </dd>
-                    </dl>
-                    <div className="space-y-5 xl:col-span-3">
-                      <div className="space-y-6">
-                        <div>
-                          <h2 className="text-2xl font-bold leading-8 tracking-tight">
-                            <Link
-                              href={`/blog/${slug}`}
-                              className="text-gray-900 dark:text-gray-100"
-                            >
-                              {title}
-                            </Link>
-                          </h2>
-                          <div className="flex flex-wrap">
-                            {tags.map((tag) => (
-                              <Tag key={tag} text={tag} />
-                            ))}
-                          </div>
-                        </div>
-                        <div className="prose text-gray-500 max-w-none dark:text-gray-400">
-                          {summary}
-                        </div>
-                      </div>
-                      <div className="text-base font-medium leading-6">
-                        <Link
-                          href={`/blog/${slug}`}
-                          className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-                          aria-label={`Read "${title}"`}
-                        >
-                          Read more &rarr;
-                        </Link>
-                      </div>
+            <div variant="container">
+                <div as="h2" my={40}>Filter movies</div>
+    
+                <div mb={100}>
+                    <div width={200} mr={20}>
+                        <Select
+                            getOptionLabel={option => `${option.First_name} ${option.Last_name}`}
+                            getOptionValue={option => option.id}
+                            options={actors}
+                            instanceId="actors"
+                            isMulti
+                            placeholder="Filter by Actors"
+                            onChange={values => setActors(values.map(actor => actor.id))}
+                        />
+                        <br />
+                        <Select 
+                            getOptionLabel={option => option.title} 
+                            getOptionValue={option => option.id} 
+                            options={genres} 
+                            instanceId="genres" 
+                            placeholder="Filter by Genres"
+                            isClearable
+                            onChange={value => setGenreId(value ? value.id : null)}
+                        />
                     </div>
-                  </div>
-                </article>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-      {posts.length > MAX_DISPLAY && (
-        <div className="flex justify-end text-base font-medium leading-6">
-          <Link
-            href="/blog"
-            className="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-            aria-label="all posts"
-          >
-            All Posts &rarr;
-          </Link>
-        </div>
-      )}
-    </>
-  )
+                    <div>
+                        {status === 'loading' && <div>I'm loading your movies</div>}
+                        {status === 'error' && <div>Something went wrong</div>}
+
+                        {status === 'success' && data.map(movie => (
+                            <div key={movie.id} p={10}>
+                                <strong>{movie.title}</strong> - {movie.genre ? movie.genre.title : null}<br />
+
+                                {movie.actors.length > 0 && movie.actors.map(actor => (
+                                    <small key={actor.id}>{actor.First_name} {actor.Last_name} &nbsp;</small>  
+                                ))}
+
+                            </div>
+                        ))}
+                    </div>
+                    
+                </div>
+            </div>
+        </>
+    )
+   
 }
+
+
+export async function getServerSideProps() {
+    const { NEXT_PUBLIC_API_URL } = process.env
+
+    const res = await fetch(`${NEXT_PUBLIC_API_URL}/movies`)
+    const moviesData = await res.json()
+
+
+    const resActors = await fetch(`${NEXT_PUBLIC_API_URL}/actors`)
+    const actorsData = await resActors.json()
+
+    const resGenres = await fetch(`${NEXT_PUBLIC_API_URL}/genres`)
+    const genresData = await resGenres.json()
+
+    // const resBolags = await fetch(`${NEXT_PUBLIC_API_URL}/bolags`)
+    // const bolagsData = await resBolags.json()
+
+    return {
+        props: {
+            movies: moviesData,
+            actors: actorsData,
+            genres: genresData,
+            // bolags: bolagsData
+        },
+    }
+}
+
+export default FilterMovies
+
+
+
+

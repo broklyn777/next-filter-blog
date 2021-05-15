@@ -1,3 +1,4 @@
+
 import Select from 'react-select'
 import {useQuery, useQueryClient} from 'react-query'
 import {useState} from 'react'
@@ -33,7 +34,6 @@ const getMovies = async(key) => {
 }
 
 const FilterMovies = ({ movies, actors, genres }) => {
-
     const queryClient = useQueryClient()
     const [genreId, setGenreId] = useState(null)
     const [actorsIds, setActors] = useState([])
